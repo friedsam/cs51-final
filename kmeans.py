@@ -43,4 +43,12 @@ def calcDist(point1,point2):
     dist = m.sqrt(sq_sum)
     return dist
 
-
+#work-in-progress:
+def density(clusters):
+    density = 0
+    centroids = [0]*len(clusters)
+    for i in range(len(clusters)):
+        centroids[i] = list(clusters[i].mean(axis=0))
+        for j in len(clusters[i]):
+            density += calcDist(centroids[i], clusters[i][j]
+        
