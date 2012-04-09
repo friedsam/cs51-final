@@ -43,7 +43,7 @@ def calcDist(point1,point2):
     dist = m.sqrt(sq_sum)
     return dist
 
-
+#TODO ensity needs to be changed to return list of density for each cluster
 #returns the average cluster average density:
 def density(clusters):
     density = 0
