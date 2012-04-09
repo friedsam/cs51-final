@@ -43,12 +43,43 @@ def calcDist(point1,point2):
     dist = m.sqrt(sq_sum)
     return dist
 
-#work-in-progress:
+
+#returns the average cluster average density:
 def density(clusters):
     density = 0
     centroids = [0]*len(clusters)
     for i in range(len(clusters)):
         centroids[i] = list(clusters[i].mean(axis=0))
-        for j in len(clusters[i]):
-            density += calcDist(centroids[i], clusters[i][j]
+        for j in range(len(clusters[i])):
+            density += calcDist(centroids[i], clusters[i][j]) / len(clusters[i])
+    return density / len(clusters)
+
+#calculates average dissimilarity between a point and a list of points
+def dissimilarity(point, lst):
+    dsm = 0
+    for i in range(len(lst)):
+        dsm += calcDist(point, lst[i])
+    return (dsm / len(lst))
+
+def silhouette(clusters):
+    #silh = []
+    total = 0
+    datalength = 0
+    for i in range(len(clusters)):
+        datalength += len(clusters[i])
+        #silh.append([0] * len(clusters[i]))
+        initial = 0
+        if i == 0: initial = 1
+        for j in range(len(clusters[i])):
+            datum = clusters[i][j]
+            owndsm = dissimilarity(datum, clusters[i])
+            # finds lowest average dissimilarity of another cluster
+            min_dsm = dissimilarity(datum, clusters[initial])
+            for k in range(len(clusters)):
+                if k != i:
+                    new_dsm = dissimilarity(datum, clusters[k])
+                    if new_dsm < min_dsm: min_dsm = new_dsm
+            #silh[i][j] = 1 - owndsm / min_dsm
+            total += 1 - owndsm/ min_dsm
+    return total/datalength
         
