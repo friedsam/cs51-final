@@ -39,7 +39,9 @@ def pExtract( filename ):
 	outputlist = []
 	rawlist = pFormat( filename )
 	for matrix,label in rawlist:
-		label = re.findall(r"\d+",label)[0]
+		#assuming these are castable as int, 
+		#which is a reasonable assumption 
+		label = int(re.findall(r"\d+",label)[0])
 		dummy = []  
 		for element in matrix:
 			row = map(float,re.findall(r"\d+",element))
@@ -51,3 +53,4 @@ def pExtract( filename ):
 if __name__ == "__main__":
 	for inputf, outputf in c_listZip:
 		pickle.dump( pExtract( inputf ), open( outputf,"w" ) ) 
+		print("Parsing %s complete!" % outputf)

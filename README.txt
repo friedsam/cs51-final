@@ -24,6 +24,12 @@ Important:
 Add PYTHONPATH 
 
 Organization:
+README.txt : main readme of the toolbox. 
+Data
+|* handwriting
+ |* clearall.sh : removes all the pickle objects in the directory 
+ |* parse.sh : makes all the text files into native pickle objects
+
 <To be completed> 
 
 
