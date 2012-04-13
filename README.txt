@@ -20,6 +20,9 @@ Python Image Library (PIL)
 Numpy /SciPy 
 PyQt 
 
+Important: 
+Add PYTHONPATH 
+
 Organization:
 <To be completed> 
 
