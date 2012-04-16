@@ -91,4 +91,40 @@ def silhouette(clusters):
                     if new_dsm < min_dsm: min_dsm = new_dsm
             total += 1 - owndsm/ min_dsm
     return total/datalength
+
+
+# kmeans algorithm :
+# takes an int number of clusters and a numpy array of data
+# returns a length num list of clusters
+# each cluster is a numpy array of its data points.
+def makeClusters(number_of_clusters, data):
+    new_clusters = initializeClusters(data,number_of_clusters)
+    #calculate initial centroids 
+    new_centroids = getCentroids(new_clusters)
+    old_centroids = []
+    # beginning of loop, while new_centroids not equal old_centroids
+    '''iters = 100
+    while (iters > 0):
+        old_centroids = new_centroids
+        # calculate new clusters
+        new_clusters = reassignClusters(new_centroids,data)
+        # recalculate new centroids
+        new_centroids = getCentroids(new_clusters)
+        iters -= 1'''
+    while (old_centroids != new_centroids):
+        old_centroids = new_centroids
+        # calculate new clusters
+        new_clusters = reassignClusters(new_centroids,data)
+        # recalculate new centroids
+        new_centroids = getCentroids(new_clusters)
+    return new_clusters
+
+def evals(clusters):
+    print("Average cluster density: ")
+    print(density(clusters))
+    print("\nSilhouette of the clusters: ")
+    print(silhouette(clusters))
+    
+#def outputClusters(clusters):
+#    for i in clusters:
         
