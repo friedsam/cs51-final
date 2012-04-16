@@ -1,1 +1,1 @@
-python ../../src/parse_input.py *.txt 
+python ../../src/parse_input.py *.txt

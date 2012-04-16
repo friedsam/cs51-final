@@ -14,26 +14,33 @@ import csv
 
 #Load all files necessary into appropriate pickle format
 
-#BLAHBLAHBLAH
-
 #Top Level Functions
 #Maybe if these are really slow, I should bounce them down to 
 
 #individual files and respective pkl components 
 
-c_fileTest1k	=	"../data/handwriting/test-1k.pkl"
-c_fileVal1k	=	"../data/handwriting/validation-1k.pkl"
-c_fileTrain9k	=	"../data/handwriting/training-9k.pkl"
+c_fileTest1k	=	"../data/handwriting/tmp/test-1k.pkl"
+c_fileVal1k	=	"../data/handwriting/tmp/validation-1k.pkl"
+c_fileTrain9k	=	"../data/handwriting/tmp/training-9k.pkl"
+
+c_fileTest1k_colmat 	= "../data/handwriting/tmp/test-1k_colmat.pkl"
+c_fileVal1k_colmat	= "../data/handwriting/tmp/validation-1k_colmat.pkl"
+c_fileTrain9k_colmat	= "../data/handwriting/tmp/training-9k_colmat.pkl" 
 
 c_listTest1k 	=	pickle.load(open(c_fileTest1k,"r"))
 c_listVal1k	=	pickle.load(open(c_fileVal1k,"r"))
 c_listTrain9k	=	pickle.load(open(c_fileTrain9k,"r"))
+
  
 def initialize( pairlist ):
 	outputlist = [] 
 	for data,label in pairlist:
 		outputlist.append( [array(data), label] ) 
 	return outputlist 
+
+c_listParsePKL 	=	[ initialize( c_listTest1k ), initialize( c_listVal1k ), initialize( c_listTrain9k ) ] 
+c_listParseFile	=	[ c_fileTest1k_colmat, c_fileVal1k_colmat, c_fileTrain9k_colmat ] 
+c_listParseZip	=	zip(c_listParsePKL, c_listParseFile)
 
 def unzip( pairlist ):
 	l1 = []
@@ -76,14 +83,16 @@ def labelsort( pairlist ):
 def toDataMat( pairlist ):
 	'''gets pairlist and turns into (196) x n matrix, where 
 	n is the number of data points.'''
-	outputarray = None 
+	outputarray = empty((1,196)) 
+	dummy = None   
 	for aData,label in pairlist:
-		if outputarray == None:
-			outputarray = aData.flatten()
-			continue 
-		else:
-			outputarray = vstack([aData.flatten(),outputarray])
-	return outputarray.T 	
+		dummy = [aData.flatten()] 
+		outputarray = vstack([outputarray, dummy])
+	outputarray = outputarray[1:]
+	outputarray = outputarray.T	
+	return outputarray 
+
+#This still needs to be fixed. 
 
 def fromDataMat( mat ):
 	'''gets matrix of data points and converts into 
@@ -103,6 +112,11 @@ def fromDataMat( mat ):
 #Test Execute
 
 if __name__ == "__main__":
-	with open("../data/test/test.pkl","w") as outputf:
-		pickle.dump(toDataMat( initialize(c_listTest1k) ), outputf)
-		print("Done!")	
+	print("Creating column matrix files ... \n")
+	for pairlist, filename in c_listParseZip: 
+		with open( filename, "w" ) as outputf:
+			print("parsing %s\n" % filename )
+			pickle.dump(toDataMat( pairlist ), outputf )
+	print("Done!\n")
+
+#toDataMat( initialize( c_listTest1k ) )

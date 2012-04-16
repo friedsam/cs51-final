@@ -10,7 +10,7 @@ if len(sys.argv) < 1:
 	raise Exception("Usage: parse_input.py <input.txt>")
 
 c_listFilename 		= sys.argv[1:]
-c_listOutputname 	= map(lambda x: x.replace(".txt",".pkl"), c_listFilename)
+c_listOutputname 	= map(lambda x: "tmp/" + x.replace(".txt",".pkl"), c_listFilename)
 c_listZip		= zip(c_listFilename,c_listOutputname)
 
 #Sequential Code:
