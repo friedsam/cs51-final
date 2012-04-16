@@ -1,15 +1,16 @@
 from numpy import *
 import matrix
-import sys
+import sys 
 import pickle
+
+c_filePKL, c_numcomps = sys.argv[1:]
 
 # very simple matrices for basic testing
 #a = array([[1.,2.,3.],[4.,5.,6.],[7.,8.,9.]])
 #b = array([[1.,6.,2.],[6.,3.,1.]])
 
-c_filePKL, c_numcomps = sys.argv[1:]
-
-def covariance(mat,dim,numdata):
+def covariance(mat):
+	dim,numdata = mat.shape
         m = array([mean(mat,1)]).T
         new_mat = zeros((dim,dim))
         for i in range(numdata):
@@ -21,36 +22,31 @@ def covariance(mat,dim,numdata):
 	return cov_mat
 
 # finds eigenvalues and associated eigenvectors; sort in decreasing order
-def eigs(mat,dim):
+def eigs(mat, comps):
+	#dim = mat.shape[0]
 	val,vec = linalg.eig(mat)
-	for i in reversed (range(dim)):
-		if val[i].imag != 0:
-			val = delete(val,i)
-			vec = delete(vec,i)
+	#for i in reversed (range(dim)):
+	#	if val[i].imag != 0:
+	#		val = delete(val,i,0)
+	#		vec = delete(vec.T,i,0).T
 
 	perm = argsort(-val)
 	valsort = val[perm]
-	vecsort = (vec.T[perm]).T
+	vecsort = vec.T[perm].T
 	return valsort, vecsort
+
 
 
 def PCA(mat, comps):
 	dim,numdata = mat.shape
-	cov_mat = covariance(mat,dim,numdata)
-	vals,vecs = eigs(cov_mat,dim)
-        if len(vals) < comps:
-		raise Exception("Not enough real eigenvalues.")
-	perm = argsort(-vals)
-        # valsort = vals[perm]
-        #vecsort = vecs[:,perm]
+	cov_mat = covariance(mat)
+	vals,vecs = eigs(cov_mat,comps)
+        #if len(vals) < comps:
+	#	raise Exception("Not enough real eigenvalues.")
 
-	#projmat = zeros((comps,numdata))
 	projmat = dot(vecs.T,mat)
-	#for i in range(comps):
-	#	for j in range(numdata):
-	#		projmat[i][j] = dot(vecsort[i],mat[:,j])
-
-	return projmat
+	#return projmat[0:comps]
+	return projmat 
 
 def variance(mat,comps):
         dim,numdata = mat.shape
@@ -80,6 +76,4 @@ def decreasing(mat,comps):
 	return True
 
 if __name__ == "__main__":
-	PCA(pickle.load(open(c_filePKL)), c_numcomps) 
-
-
+	print( str(PCA(pickle.load(open(c_filePKL)), c_numcomps)) )
