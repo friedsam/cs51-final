@@ -2,7 +2,15 @@ import random as rnd
 import math as m
 from numpy import *
 
+# clusters are going to be lists of a singular cluster.
+# a cluster is an arrays of data points.
 
+# centroids are similarly a list of the data point that is the
+# center for each cluster
+
+#the data invariant is a numpty array of datapoints
+
+# randomly assigns each data point to a cluster, returning clusters
 def initializeClusters(data,number_of_clusters):
     clust = [array([[]])] * number_of_clusters
     for i in range(data.shape[0]):
@@ -13,12 +21,15 @@ def initializeClusters(data,number_of_clusters):
             clust[rand] = append(clust[rand],[data[i,:]],0)
     return clust
 
-def getCentroids(new_clusters):
-    centroids = [0]*len(new_clusters)
-    for i in range(len(new_clusters)):
-        centroids[i] = list(new_clusters[i].mean(axis=0))
+# returns the centroids of some clusters
+def getCentroids(clusters):
+    centroids = [0]*len(clusters)
+    for i in range(len(clusters)):
+        centroids[i] = list(clusters[i].mean(axis=0))
     return centroids
 
+# reassigns each data point so that it is a member of the
+# cluster with thevclosest centroid
 def reassignClusters(centroids,data):
     clust = [array([[]])] * len(centroids)
     for i in range(data.shape[0]):
@@ -35,6 +46,7 @@ def reassignClusters(centroids,data):
             clust[min_ind] = append(clust[min_ind],[data[i,:]],0)
     return clust
 
+# simple Euclidean distance
 def calcDist(point1,point2):
     dim = len(point1)
     sq_sum = 0
@@ -43,8 +55,7 @@ def calcDist(point1,point2):
     dist = m.sqrt(sq_sum)
     return dist
 
-#TODO ensity needs to be changed to return list of density for each cluster
-#returns the average cluster average density:
+# returns the average cluster average density (for evaluation)
 def density(clusters):
     density = 0
     centroids = [0]*len(clusters)
@@ -61,13 +72,12 @@ def dissimilarity(point, lst):
         dsm += calcDist(point, lst[i])
     return (dsm / len(lst))
 
+# returns the average silhouette for some clusters (for evaluation)
 def silhouette(clusters):
-    #silh = []
     total = 0
     datalength = 0
     for i in range(len(clusters)):
         datalength += len(clusters[i])
-        #silh.append([0] * len(clusters[i]))
         initial = 0
         if i == 0: initial = 1
         for j in range(len(clusters[i])):
@@ -79,7 +89,6 @@ def silhouette(clusters):
                 if k != i:
                     new_dsm = dissimilarity(datum, clusters[k])
                     if new_dsm < min_dsm: min_dsm = new_dsm
-            #silh[i][j] = 1 - owndsm / min_dsm
             total += 1 - owndsm/ min_dsm
     return total/datalength
         
