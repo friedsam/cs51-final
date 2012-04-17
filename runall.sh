@@ -6,3 +6,6 @@
 
 echo "Running Handwriting Recognition Module ..."
 
+
+echo "Running pca ... "
+python src/pca/pca.py data/handwriting/tmp/training-9k_colmat.pkl pca_output.pkl 100
