@@ -1,6 +1,7 @@
 from numpy import *
 from kmeans import *
 import pickle
+import sys
 
 # takes a filename of a pickle of a numpy array of points
 # and a int for a number of clusters.
