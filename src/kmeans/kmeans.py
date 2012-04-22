@@ -95,15 +95,16 @@ def silhouette(clusters):
 
 # kmeans algorithm :
 # takes an int number of clusters and a numpy array of data
-# returns a length num list of clusters
-# each cluster is a numpy array of its data points.
-def makeClusters(number_of_clusters, data):
+# returns (a length num list of clusters where each cluster is a numpy array
+# of its data points) paired with ( a list of the centroids).
+def makeClusters(data, number_of_clusters):
     new_clusters = initializeClusters(data,number_of_clusters)
     #calculate initial centroids 
     new_centroids = getCentroids(new_clusters)
     old_centroids = []
     # beginning of loop, while new_centroids not equal old_centroids
-    '''iters = 100
+    '''
+    iters = 100
     while (iters > 0):
         old_centroids = new_centroids
         # calculate new clusters
@@ -117,14 +118,23 @@ def makeClusters(number_of_clusters, data):
         new_clusters = reassignClusters(new_centroids,data)
         # recalculate new centroids
         new_centroids = getCentroids(new_clusters)
-    return new_clusters
-
+    return (new_clusters, new_centroids)
+'''
 def evals(clusters):
     print("Average cluster density: ")
     print(density(clusters))
     print("\nSilhouette of the clusters: ")
     print(silhouette(clusters))
+
+def printPoint(datum):
+
     
-#def outputClusters(clusters):
-#    for i in clusters:
-        
+def outputClusters(clusters):
+    for i in range(len(clusters)):
+        print("Printing cluster"
+        print(i)
+        print("\n")
+        for k in range(len(clusters[i])):
+            printPoint(clusters[i][k])
+            print("\n")
+            '''
