@@ -12,7 +12,7 @@ def clusterpkl(input_filename, k_num, output_filename):
     f = open( output_filename, "w")
     pickle.dump( (clusters, centroids), f)
     f.close()
-    print("Done!\n"
+    print "Done!\n"
 
 #function to load a cluster pkl (created above)
 def getclusterspkl(filename):
