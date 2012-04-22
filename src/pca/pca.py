@@ -10,6 +10,16 @@ c_numcomps 			= int(sys.argv[3])
 #A = array([[1.,2.,3.],[4.,5.,6.],[7.,8.,9.]])
 #B = array([[1.,6.,2.],[6.,3.,1.]]) 
 
+#I'm also going to use QR decomposition, if necessary. 
+#I don't think at this point, orthonormalization is necessary. 
+#Simply project onto eigenspace, and then find Euclidean distance 
+#between a projected data vector and the centroid of the subspace 
+#defined by the projection of the digits. Perhaps test it on 
+#a dumb 1 dimensional projection, and looking at how it does. 
+#K-means clustering comes in handy because more clusters probably leads to 
+#better centroid values for differing digits.  
+
+
 if len( sys.argv[1:] ) < 3:
 	raise Exception("Usage: python pca.py <input.pkl> <output.pkl> <number_of_components>")
 
