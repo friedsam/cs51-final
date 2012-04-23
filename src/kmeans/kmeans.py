@@ -2,13 +2,16 @@ import random as rnd
 import math as m
 from numpy import *
 
+# makeClulusters is the main algorithm, see pklkmeans.py for
+# cluster invariant
+
 # clusters are going to be lists of a singular cluster.
-# a cluster is an arrays of data points.
+# a cluster is an arrays of the data points that is in the cluster.
 
-# centroids are similarly a list of the data point that is the
-# center for each cluster
+# centroids are similarly a list of the vectors of each cluster
+# vthat is the center for each cluster
 
-#the data invariant is a numpty array of datapoints
+# the data invariant is a numpty array of datapoints
 
 # randomly assigns each data point to a cluster, returning clusters
 def initializeClusters(data,number_of_clusters):
@@ -103,40 +106,21 @@ def makeClusters(data, number_of_clusters):
     new_centroids = getCentroids(new_clusters)
     old_centroids = []
     # beginning of loop, while new_centroids not equal old_centroids
-    iters = 0
-    '''
-    while (iters < 100):
-        old_centroids = new_centroids
-        # calculate new clusters
-        new_clusters = reassignClusters(new_centroids,data)
-        # recalculate new centroids
-        new_centroids = getCentroids(new_clusters)
-        iters -= 1'''
+    #iters = 0
     while (old_centroids != new_centroids):
         old_centroids = new_centroids
-        # calculate new clusters
         new_clusters = reassignClusters(new_centroids,data)
-        # recalculate new centroids
         new_centroids = getCentroids(new_clusters)
-        iters += 1
-        print " %d " % iters
+        #iters += 1
+        #print " %d " % iters
     return (new_clusters, new_centroids)
-'''
+
+
+''' #Print out evaluating clusters... Not fully realized
 def evals(clusters):
-    print("Average cluster density: ")
-    print(density(clusters))
-    print("\nSilhouette of the clusters: ")
-    print(silhouette(clusters))
+    print "Average cluster density: "
+    print density(clusters)
+    print "\nSilhouette of the clusters: "
+    print silhouette(clusters)
 
-def printPoint(datum):
-
-    
-def outputClusters(clusters):
-    for i in range(len(clusters)):
-        print("Printing cluster"
-        print(i)
-        print("\n")
-        for k in range(len(clusters[i])):
-            printPoint(clusters[i][k])
-            print("\n")
             '''
