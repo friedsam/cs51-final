@@ -103,9 +103,9 @@ def makeClusters(data, number_of_clusters):
     new_centroids = getCentroids(new_clusters)
     old_centroids = []
     # beginning of loop, while new_centroids not equal old_centroids
+    iters = 0
     '''
-    iters = 100
-    while (iters > 0):
+    while (iters < 100):
         old_centroids = new_centroids
         # calculate new clusters
         new_clusters = reassignClusters(new_centroids,data)
@@ -118,6 +118,8 @@ def makeClusters(data, number_of_clusters):
         new_clusters = reassignClusters(new_centroids,data)
         # recalculate new centroids
         new_centroids = getCentroids(new_clusters)
+        iters += 1
+        print " %d " % iters
     return (new_clusters, new_centroids)
 '''
 def evals(clusters):
