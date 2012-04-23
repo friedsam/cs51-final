@@ -19,6 +19,13 @@ import csv
 
 #individual files and respective pkl components 
 
+#need to sort, keep track of k-means centroids, treat each of them differently. 
+
+#Data really needs to be renormalized, so that it takes values between 0 and 255, 
+#and not arbitrary values. Should we use standard linear normalization?
+#but I think this misses the point, because we are not using minimum error formulation, 
+#but rather maximum variance formulation.  
+
 c_fileTest1k	=	"../data/handwriting/tmp/test-1k.pkl"
 c_fileVal1k	=	"../data/handwriting/tmp/validation-1k.pkl"
 c_fileTrain9k	=	"../data/handwriting/tmp/training-9k.pkl"
