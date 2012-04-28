@@ -2,7 +2,7 @@ import montage
 import pickle
 import string
 from numpy import *
-import kmeans
+from kmeans import *
 
 # remember to transpose!
 
