@@ -1,5 +1,6 @@
 #!/usr/bin/env python 
 
+from numpy import * 
 import pickle
 import sys
 import re 

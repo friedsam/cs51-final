@@ -91,31 +91,30 @@ def toDataMat( pairlist ):
 	'''gets pairlist and turns into (196) x n matrix, where 
 	n is the number of data points.'''
 	outputarray = empty((1,196)) 
-	dummy = None   
+	dummydata = None 
+	dummylabel = []   
 	for aData,label in pairlist:
-		dummy = [aData.flatten()] 
-		outputarray = vstack([outputarray, dummy])
+		dummydata = [aData.flatten()] 
+		outputarray = vstack([outputarray, dummydata])
+		dummylabel.append(label)
 	outputarray = outputarray[1:]
 	outputarray = outputarray.T	
-	return outputarray 
+	return outputarray,dummylabel 
 
-#This still needs to be fixed. 
+#This is probably completely unnecesssary now.  
 
-def fromDataMat( mat ):
-	'''gets matrix of data points and converts into 
-	matrix of image matrices'''
-	outputlist = []
-	matT = mat.T
-	for row in matT:
-		outputlist.append(fromDataVec( row )) 
-	return outputlist 
+#def fromDataMat( mat ):
+#	'''gets matrix of data points and converts into 
+#	matrix of image matrices'''
+#	outputlist = []
+#	matT = mat.T
+#	for row in matT:
+#		outputlist.append(fromDataVec( row )) 
+#	return outputlist 
 
 #remember the method a.tolist() to make arrays into lists. 
 #will come in handy when you want to de-array things. 
-
-#pypng can save numpy arrays as images.  
-#also try looking at montage sheet 
-		
+ 		
 #Test Execute
 
 if __name__ == "__main__":

@@ -29,12 +29,10 @@ def getclusterspkl(filename):
         a[1][k] -> kth centroid (data point format)
 '''
 
-c_fileInPKL, c_fileOutPKL   = sys.argv[1:3]
-c_numclusters               = int(sys.argv[3])
-
-if len( sys.argv[1:] ) < 3:
-    raise Exception("Usage: python pklkmeans.py <input.pkl> <output.pkl> <number_of_clusters>")
-    
 if __name__ == "__main__":
-    clusterpkl(c_fileInPKL, c_numclusters, c_fileOutPKL)
+	c_fileInPKL, c_fileOutPKL   = sys.argv[1:3]
+	c_numclusters               = int(sys.argv[3])
+	if len( sys.argv[1:] ) < 3:
+    		raise Exception("Usage: python pklkmeans.py <input.pkl> <output.pkl> <number_of_clusters>")
+	clusterpkl(c_fileInPKL, c_numclusters, c_fileOutPKL)
     
