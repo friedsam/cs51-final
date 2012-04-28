@@ -3,7 +3,7 @@ import sys
 import pickle
 import pylab
 
-c_fileInput, c_fileOutput = sys.argv[1:3]
+#c_fileInput, c_fileOutput = sys.argv[1:3]
 
 
 def montage(data, outfile, colormap=pylab.cm.gist_gray):
@@ -31,6 +31,6 @@ def montage(data, outfile, colormap=pylab.cm.gist_gray):
 
 
 
-if __name__ == "__main__":
-	pkl = pickle.load(open(c_fileInput))
-	montage(pkl, c_fileOutput)
+#if __name__ == "__main__":
+#	pkl = pickle.load(open(c_fileInput))
+#	montage(pkl, c_fileOutput)
