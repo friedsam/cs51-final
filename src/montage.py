@@ -40,6 +40,9 @@ def montage(data, outfile, colormap=pylab.cm.gist_gray):
 
 	return montageMatrix
 
+def run( inputFilepath, outputFilepath ):
+    pkl = pickle.load(open(inputFilepath))
+    montage(pkl, outputFilepath)
 
 """
 if __name__ == "__main__":

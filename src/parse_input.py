@@ -49,6 +49,12 @@ def pExtract( filename ):
 		outputlist.append([dummy,label])
 	return outputlist 
 
+def parse( inputf, outputf ):
+    print("Parsing: %s" % inputf)
+    print("To: %s" % outputf)
+    pickle.dump( pExtract( inputf ), open( outputf,"w" ) ) 
+    print("Parsing %s complete!" % outputf)  
+
 #Execute 
 if __name__ == "__main__":
 	for inputf, outputf in c_listZip:
