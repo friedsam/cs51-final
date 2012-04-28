@@ -15,9 +15,13 @@ projmat, vecs = pca.PCA(mat, comps)
 clusters, centroids = kmeans.makeClusters(data, number_of_clusters)  
 
 def eucDist(v1,v2):
+	'''Euclidean Distance'''
 	return linalg.norm(v1-v2) 
 
-def makeDist(vec, centroidLst) 
+def makeDist(vec, centroidLst)
+	'''Makes list of containing the 
+	Euclidean Distance between vec and every 
+	element in the centroidLst.''' 
 	dummy = []
 	for cen,lab in centroiLst:
 		dummy.append(eucDist(vec,cen))
@@ -36,16 +40,11 @@ def assign(testMat, centroidLst):
 	return dummy 
 
 def makeTriple( testPair, centroidLst ):
+	'''Makes a triple containing the datapoint, 
+	true label, and assigned label.'''
 	testMat, labelLst = testPair
 	assignLablst = assign(testMat, centroidLst) 
 	trueLablst = labelLst
 	return zip(origMat, trueLablst, assignLablst ) 
 
-	
 
-
- 
-	
-		
-
-		

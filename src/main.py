@@ -1,12 +1,15 @@
 #!/usr/bin/env python
+
 from numpy import * 
 import pickle
 import sys
 import csv 
+import kmeans 
+import pca 
+
 #import parse_input
 #import parse_ouput 
-#import etc ... 
-
+#import etc ...
 
 #This is the main execution python script. 
 #In particular, this will contain all top-level functions 
@@ -26,103 +29,148 @@ import csv
 #but I think this misses the point, because we are not using minimum error formulation, 
 #but rather maximum variance formulation.  
 
-c_fileTest1k	=	"../data/handwriting/tmp/test-1k.pkl"
-c_fileVal1k	=	"../data/handwriting/tmp/validation-1k.pkl"
-c_fileTrain9k	=	"../data/handwriting/tmp/training-9k.pkl"
+#c_fileTest1k_colmat 	= "../data/handwriting/tmp/test-1k_colmat.pkl"
+#c_fileVal1k_colmat	= "../data/handwriting/tmp/validation-1k_colmat.pkl"
+#c_fileTrain9k_colmat	= "../data/handwriting/tmp/training-9k_colmat.pkl" 
 
-c_fileTest1k_colmat 	= "../data/handwriting/tmp/test-1k_colmat.pkl"
-c_fileVal1k_colmat	= "../data/handwriting/tmp/validation-1k_colmat.pkl"
-c_fileTrain9k_colmat	= "../data/handwriting/tmp/training-9k_colmat.pkl" 
+#c_listTest1k 	=	pickle.load(open(c_fileTest1k_colmat,"r"))
+#c_listVal1k	=	pickle.load(open(c_fileVal1k_colmat,"r"))
+#c_listTrain9k	=	pickle.load(open(c_fileTrain9k_colmat,"r"))
 
-c_listTest1k 	=	pickle.load(open(c_fileTest1k,"r"))
-c_listVal1k	=	pickle.load(open(c_fileVal1k,"r"))
-c_listTrain9k	=	pickle.load(open(c_fileTrain9k,"r"))
+#=================== HELPER FUNCTIONS ========================#
+	
+def eucDist(v1,v2):
+        '''Euclidean Distance'''
+        return linalg.norm(v1-v2)
 
- 
-def initialize( pairlist ):
-	outputlist = [] 
-	for data,label in pairlist:
-		outputlist.append( [array(data), label] ) 
-	return outputlist 
-
-c_listParsePKL 	=	[ initialize( c_listTest1k ), initialize( c_listVal1k ), initialize( c_listTrain9k ) ] 
-c_listParseFile	=	[ c_fileTest1k_colmat, c_fileVal1k_colmat, c_fileTrain9k_colmat ] 
-c_listParseZip	=	zip(c_listParsePKL, c_listParseFile)
-
-def unzip( pairlist ):
-	l1 = []
-	l2 = [] 
-	for data,label in pairlist:
-		l1.append(data) 
-		l2.append(label)
-	return (l1,l2) 
-		
-def getn( pairlist, digit ):
-	'''crawls through list and finds only those with the 
-	specified label'''
-	outputlist = [] 
+def getn( inputpair, digit ):
+	'''crawls through list of labels and finds 
+	data with the specified label'''
+	dummyindex = []
+	outputarray = empty((1,196)) 
 	d = digit 
-	for data, label in pairlist:
-		if label == d:
-			outputlist.append([data,label])
-		else:
-			continue 
-	return outputlist 
-
-#need to fix abnormal nesting behavior
-
-def labelsort( pairlist ):
+	dataMat, labelLst = inputpair
+	numRow, numCol = dataMat.shape  
+	for i in range(0,len(labelLst)):
+		if labelLst[i] == d:
+			dummyindex.append(i) 
+	for j in dummyindex:
+		outputarray = vstack( [outputarray, [dataMat[:,j]]] )
+	outputarray = outputarray[1:]
+	return outputarray.T,d
+	
+def labelsort( inputpair ):
 	'''is a function that returns the [data,label] and sorts 
 	from lowest to highest based on the labels (0-9).
 	Returns a [data',label'] list. '''
 	outputlist = []
 	for i in range(0,10):
-		outputlist.append(getn( pairlist, i ) )
+		outputlist.append(getn( inputpair, i ))
 	return outputlist
 
+#THESE ARE PROBABLY COMPLETELY UNNECESSARY 
+
 #def fromDataVec( vec ):
-#	'''turns (d x d) dimensional vector into 
-#	its matrix counterpart. '''
-#	outputlist = []
-		
-	
-
-def toDataMat( pairlist ):
-	'''gets pairlist and turns into (196) x n matrix, where 
-	n is the number of data points.'''
-	outputarray = empty((1,196)) 
-	dummydata = None 
-	dummylabel = []   
-	for aData,label in pairlist:
-		dummydata = [aData.flatten()] 
-		outputarray = vstack([outputarray, dummydata])
-		dummylabel.append(label)
-	outputarray = outputarray[1:]
-	outputarray = outputarray.T	
-	return outputarray,dummylabel 
-
-#This is probably completely unnecesssary now.  
+#       '''turns (d x d) dimensional vector into 
+#       its matrix counterpart. '''
+#       outputlist = []
 
 #def fromDataMat( mat ):
-#	'''gets matrix of data points and converts into 
-#	matrix of image matrices'''
-#	outputlist = []
-#	matT = mat.T
-#	for row in matT:
-#		outputlist.append(fromDataVec( row )) 
-#	return outputlist 
+#       '''gets matrix of data points and converts into 
+#       matrix of image matrices'''
+#       outputlist = []
+#       matT = mat.T
+#       for row in matT:
+#               outputlist.append(fromDataVec( row )) 
+#       return outputlist 
 
 #remember the method a.tolist() to make arrays into lists. 
 #will come in handy when you want to de-array things. 
- 		
-#Test Execute
 
-if __name__ == "__main__":
-	print("Creating column matrix files ... \n")
-	for pairlist, filename in c_listParseZip: 
-		with open( filename, "w" ) as outputf:
-			print("parsing %s\n" % filename )
-			pickle.dump(toDataMat( pairlist ), outputf )
-	print("Done!\n")
 
-#toDataMat( initialize( c_listTest1k ) )
+#=================== FEATURE EXTRACTION ======================#
+
+def centroidPCA( inputpair, k ):
+	'''get the centroid list for later implementation in
+	conjunction with PCA. The input is the sorted list given 
+	by the output of the function labelsort.'''
+	sortlist = labelsort( inputpair )
+	dummylist = []
+	for item in sortlist:
+		dataMat, digit = item 
+		clusters, centroids = kmeans.makeClusters(dataMat, k)
+		for clutster_i in clusters:
+			dummylist.append((cluster_i, digit))
+	return dummylist 
+
+#=================== DATA PROJECTION =========================#
+
+def getProjData( training, test, k, D ):
+	'''Obtains linear projection transformation T
+	taking R^196 onto R^D, projects the 
+	corresponding centroids of the k clusters,
+	projects the test data onto R^D.
+	Outputs the test dataMat of D x n dimensions
+	and gives the k x 10 centroids, each of them
+	in R^D. '''
+	dummycentroid = [] 
+	trainingProj, T =  pca.PCA( training, D ) 
+	for cluster_i, digit in centroidPCA( trainingProj, k ):
+		dummycentroid.append(dot(T, cluster_i), digit)
+	testProj = dot( T,test )
+	return testProj, dummycentroid 
+
+#==================== STATSTICAL INFERENCE ======================#
+					
+def makeDist(vec, centroidLst):
+        '''Makes list of containing the 
+        Euclidean Distance between vec and every 
+        element in the centroidLst.'''
+        dummy = []
+        for cen,lab in centroiLst:
+                dummy.append(eucDist(vec,cen))
+        return dummy
+
+def assign(testMat, centroidLst):
+        '''returns list of labels
+        assigned to each column vector in 
+        the test matrix'''
+        dummy = []
+        numRow, numCol = testMat.shape
+        for i in range(0,numCol):
+                minVal = min(makeDist(testMat[:,i],centroidLst))
+                cen,lab = centroidLst.index(minVal)
+                dummy.append(lab)
+        return dummy
+
+def makeTriple( trainPair, testPair, centroidLst ):
+        '''Makes a triple containing the datapoint, 
+        true label, and assigned label.'''
+	trainMat, trainLabel = trainPair 
+        testMat, labelLst = testPair  
+        assignLablst = assign(testMat, centroidLst)
+        trueLablst = labelLst
+
+	#I don't think this zip functions works properly
+	#because I think I need to take the transpose of
+	#the function.. check this later.  
+        return zip(trainMat.T, trueLablst, assignLablst )
+
+
+#==================== RUN TIME BEHAVIOR =======================#
+
+#if __name__ == "__main__": 
+#	c_trainf, c_testf, c_triple = sys.argv[1:4]
+#	k = int(sys.argv[4])
+#	D = int(sys.argv[5]) 
+#	train 	= pickle.load(open(c_trainf)) 
+#	test 	= pickle.load(open(c_testf))   
+#	#Run 
+#	testProj, centroidLst = getProjData( train, test, k, D )
+#	#Save this 
+#	pickle.dump(makeTriple( train, testProj, centroidLst ),\
+#		open(c_triple, "w")) 
+#	#And feed into montage later. 
+
+#I need to debug part by part. 
+	

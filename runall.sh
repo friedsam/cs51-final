@@ -4,8 +4,9 @@
 #this shell script. Maybe in the future we will
 #replace this by an SConstruct type build. 
 
-echo "Running Handwriting Recognition Module ..."
+echo "Running Handwriting Recognition Module ...\n"
 
 
-echo "Running pca ... "
-python src/pca/pca.py data/handwriting/tmp/training-9k_colmat.pkl pca_output.pkl 100
+echo "Running pca ...\n" 
+
+python src/main.py /Users/ysupmoon/Documents/cs_51/final_project/cs51-final/data/handwriting/training-9k_colmat.pkl /Users/ysupmoon/Documents/cs_51/final_project/cs51-final/data/handwriting/test-1k_colmat.pkl /Users/ysupmoon/Documents/cs_51/final_project/cs51-final/output/triple.pkl 3 10
