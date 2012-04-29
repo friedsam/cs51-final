@@ -19,7 +19,7 @@ def kmeansClustersJpgs(clusters, filename, outputDirpath):
 def simplekmeans(filename, outputDirpath, k):
 # filename should be a pickle in format of colmat
     parray = pickle.load(open(filename))
-    (clusters, centroids) = makeClusters(parray, k)
+    (clusters, centroids) = makeClusters(parray[0], k)
     kmeansClustersJpgs(clusters, filename, outputDirpath)
 
 def run( inputFilepath, outputFilepath, outputDirpath, kNum):

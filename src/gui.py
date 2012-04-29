@@ -153,8 +153,7 @@ class StartQT4(QtGui.QMainWindow):
     def updateConfusion(self):
         filepath = self.digitsPath + "/conf_" + self.ui.digit.currentText().replace(".png", ".pkl")
         confusionData = pickle.load(open(filepath))
-        print("Conf: %s" % confusionData[0]) # where are the 4 values?
-        
+
         cell1 = QtGui.QTableWidgetItem(str(1) + "%")
         cell1.setBackground(QtGui.QBrush(QtGui.QColor( 255, 0, 0, 100 )))
         cell1.setTextAlignment(QtCore.Qt.AlignCenter)
