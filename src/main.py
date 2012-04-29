@@ -47,10 +47,10 @@ def getn( inputpair, digit ):
 	'''crawls through list of labels and finds 
 	data with the specified label'''
 	dummyindex = []
-	outputarray = empty((1,196)) 
 	d = digit 
 	dataMat, labelLst = inputpair
-	numRow, numCol = dataMat.shape  
+	numRow, numCol = dataMat.shape 
+	outputarray = empty((1,numRow)) 
 	for i in range(0,len(labelLst)):
 		if labelLst[i] == d:
 			dummyindex.append(i) 
@@ -90,6 +90,10 @@ def labelsort( inputpair ):
 
 #=================== FEATURE EXTRACTION ======================#
 
+#Currently k-means is not behaving so well with respect to 
+#column operations. Need to transpose input matrix, and 
+#tranpose it back to get the column representation.  
+
 def centroidPCA( inputpair, k ):
 	'''get the centroid list for later implementation in
 	conjunction with PCA. The input is the sorted list given 
@@ -98,12 +102,21 @@ def centroidPCA( inputpair, k ):
 	dummylist = []
 	for item in sortlist:
 		dataMat, digit = item 
-		clusters, centroids = kmeans.makeClusters(dataMat, k)
-		for clutster_i in clusters:
-			dummylist.append((cluster_i, digit))
+		#notice here the transpose!
+		#for the final version, need to fix.  
+		clusters, centroids = kmeans.makeClusters(dataMat.T, k)
+		for vec in centroids:
+			#initialize to numpy arrays.. 
+			#this should really be done at the k-means level.
+			vec = array(vec) 
+			dummylist.append((vec, digit))
 	return dummylist 
 
 #=================== DATA PROJECTION =========================#
+
+#Currently k-means is not behaving so well with respect to 
+#column operations. Need to transpose input matrix, and 
+#tranpose it back to get the column representation.  
 
 def getProjData( training, test, k, D ):
 	'''Obtains linear projection transformation T
@@ -113,12 +126,12 @@ def getProjData( training, test, k, D ):
 	Outputs the test dataMat of D x n dimensions
 	and gives the k x 10 centroids, each of them
 	in R^D. '''
-	dummycentroid = [] 
+	print "Running getProjData ... \n"
+	testMat, testlab = test  
 	trainingProj, T =  pca.PCA( training, D ) 
-	for cluster_i, digit in centroidPCA( trainingProj, k ):
-		dummycentroid.append(dot(T, cluster_i), digit)
-	testProj = dot( T,test )
-	return testProj, dummycentroid 
+	centroidLst = centroidPCA( trainingProj, k )
+	testProj = dot( T,testMat )
+	return testProj, centroidLst
 
 #==================== STATSTICAL INFERENCE ======================#
 					
@@ -127,7 +140,7 @@ def makeDist(vec, centroidLst):
         Euclidean Distance between vec and every 
         element in the centroidLst.'''
         dummy = []
-        for cen,lab in centroiLst:
+        for cen,lab in centroidLst:
                 dummy.append(eucDist(vec,cen))
         return dummy
 
@@ -138,18 +151,20 @@ def assign(testMat, centroidLst):
         dummy = []
         numRow, numCol = testMat.shape
         for i in range(0,numCol):
-                minVal = min(makeDist(testMat[:,i],centroidLst))
-                cen,lab = centroidLst.index(minVal)
+		distLst = makeDist(testMat[:,i],centroidLst)
+                minVal = min(distLst)
+		cen,lab = centroidLst[distLst.index(minVal)]
                 dummy.append(lab)
         return dummy
 
-def makeTriple( trainPair, testPair, centroidLst ):
+def makeTriple( training, test, k, D ):
         '''Makes a triple containing the datapoint, 
         true label, and assigned label.'''
-	trainMat, trainLabel = trainPair 
-        testMat, labelLst = testPair  
-        assignLablst = assign(testMat, centroidLst)
-        trueLablst = labelLst
+	trainMat, trainLab = training
+        testMat, testLab = test
+	testProj, centroidLst = getProjData( training, test, k, D ) 
+        assignLablst = assign(testProj, centroidLst)
+        trueLablst = testLab
 
 	#I don't think this zip functions works properly
 	#because I think I need to take the transpose of
@@ -159,18 +174,17 @@ def makeTriple( trainPair, testPair, centroidLst ):
 
 #==================== RUN TIME BEHAVIOR =======================#
 
-#if __name__ == "__main__": 
-#	c_trainf, c_testf, c_triple = sys.argv[1:4]
-#	k = int(sys.argv[4])
-#	D = int(sys.argv[5]) 
-#	train 	= pickle.load(open(c_trainf)) 
-#	test 	= pickle.load(open(c_testf))   
-#	#Run 
-#	testProj, centroidLst = getProjData( train, test, k, D )
-#	#Save this 
-#	pickle.dump(makeTriple( train, testProj, centroidLst ),\
-#		open(c_triple, "w")) 
-#	#And feed into montage later. 
+if __name__ == "__main__": 
+	c_trainf, c_testf, c_triple = sys.argv[1:4]
+	k = int(sys.argv[4])
+	D = int(sys.argv[5]) 
+	train 	= pickle.load(open(c_trainf)) 
+	test 	= pickle.load(open(c_testf))   
+	
+	#Save this 
+	pickle.dump(makeTriple( train, test, k, D ),\
+		open(c_triple, "w")) 
+	#And feed into montage later. 
 
 #I need to debug part by part. 
 	
