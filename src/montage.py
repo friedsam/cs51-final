@@ -44,11 +44,11 @@ if __name__ == "__main__":
 """
 
 # information for montage digit colors
-tp_color = 15.
+tp_color = 170.
 tp_range = 70.
-fn_color = 90.
+fn_color = 15.
 fn_range = 70.
-fp_color = 220.
+fp_color = 90.
 fp_range = 70.
 max_color = 255.
 
@@ -100,7 +100,7 @@ def colorsMontage(data, outfile, colormap=pylab.cm.gnuplot2, normalize=mc.Normal
                 image_id += 1
 
 	# create image and save it to designated outfile
-       	pylab.imshow(montageMatrix, cmap=colormap, norm=normalize, interpolation=None)
+       	pylab.imshow(montageMatrix, cmap=colormap, norm=normalize, interpolation='bicubic')
        	pylab.axis('off')
        	pylab.savefig(outfile)
 
