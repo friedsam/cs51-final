@@ -195,6 +195,24 @@ def confusion( triple, digit ):
 
 #==================== RUN TIME BEHAVIOR =======================#
 
+def run( inputDataFilepath, inputTrainingFilepath, outputFilepath, outputDirpath, numClusters, numComponents ):
+
+    c_dest_dir  = outputDirpath + "/"
+    train 	= pickle.load(open(inputTrainingFilepath))
+    test 	= pickle.load(open(inputDataFilepath))
+
+    print "making triple ... \n"
+    triple = makeTriple(train, test, numClusters, numComponents)
+    print "dumping pickle ... \n"
+    pickle.dump(triple, open(c_dest_dir + "triple.pkl", "w"))
+    for i in range(0,10):
+        confPair = confusion(triple,i)
+        print "dumping confusion", str(i)
+        pickle.dump( confPair, open( c_dest_dir + "conf_" + str(i) + ".pkl","w" ) )
+        montagelist, confusionarray = confPair
+        print "\n Making montage", str(i)
+        montage.colorsMontage( montagelist, c_dest_dir + str(i) + ".png")	
+
 if __name__ == "__main__": 
 	c_trainf, c_testf, c_dir = sys.argv[1:4]
 	k = int(sys.argv[4])
