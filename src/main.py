@@ -209,7 +209,7 @@ if __name__ == "__main__":
 	print "making triple ... \n" 
 	triple = makeTriple(train,test,k,D)
 	print "dumping pickle ... \n"
-	pickle.dump(triple,open(c_triple, "w")) 
+	pickle.dump(triple,open(c_dir + c_triple, "w")) 
 	for i in range(0,10):
 		confPair = confusion(triple,i)
 		print "dumping confusion", str(i)
