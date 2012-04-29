@@ -11,8 +11,7 @@ import sys
 import os
 import parse_input as ToPickle
 import gui_main as ToColmat
-from pca import gui_pca as PCA
-#import kmeans as KMeans
+# from pca import gui_pca as PCA
 import simplekmeans as KMeans
 # import combination as Combination
 # import montage as Montage
@@ -81,7 +80,7 @@ class StartQT4(QtGui.QMainWindow):
         outputDirpath  = QtCore.QString(outputFilepath).replace(".pkl", "")
         QtCore.QDir().mkdir(outputDirpath)
         PCA.run( str(inputFilepath), str(outputFilepath), str(outputDirpath), self.ui.pcaNumComp.value() )
-        self.updateResults( outputDirpath )
+        self.updateResults()
     
     def runKmeansOnly(self):
         print("Running K-Means Only...")
@@ -90,7 +89,7 @@ class StartQT4(QtGui.QMainWindow):
         outputDirpath  = QtCore.QString(outputFilepath).replace(".pkl", "")
         QtCore.QDir().mkdir(outputDirpath)
         KMeans.run( str(inputFilepath), str(outputFilepath), str(outputDirpath), self.ui.kmeansNumClust.value() )
-        self.updateResults( outputDirpath )
+        self.updateResults()
     
     def runCombination(self):
         print("Running Combination...")
@@ -99,7 +98,7 @@ class StartQT4(QtGui.QMainWindow):
         outputDirpath  = QtCore.QString(outputFilepath).replace(".pkl", "")
         QtCore.QDir().mkdir(outputDirpath)
         # Combination.run( str(inputFilepath), str(outputFilepath), str(outputDirpath), self.ui.pcaNumComp.value(), self.ui.kmeansNumClust.value() )
-        # self.updateResults( outputDirpath )
+        # self.updateResults()
 
     def updateDataSets(self):
         filelist = QtCore.QDir(self.dataPath).entryList()
@@ -120,7 +119,7 @@ class StartQT4(QtGui.QMainWindow):
 
         filelist = QtCore.QDir(self.digitsPath).entryList()
         self.ui.digit.clear()
-        self.ui.digit.addItems(filelist.filter(".jpg"))
+        self.ui.digit.addItems(filelist.filter(".png"))
     
     def setDigit(self):
         imageFilepath = QtCore.QString(self.digitsPath + "/" + self.ui.digit.currentText())
@@ -139,6 +138,11 @@ class StartQT4(QtGui.QMainWindow):
             self.ui.imageView.show()
             print("Image updated")
         else:
+            scene = QtGui.QGraphicsScene()
+            self.ui.imageView.setScene(scene)
+            scene.clear()
+            self.ui.imageView.repaint()
+            self.ui.imageView.show()
             print("No Image file found")
         
 

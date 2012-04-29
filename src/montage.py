@@ -26,9 +26,7 @@ def montage(data, outfile, colormap=pylab.cm.gist_gray):
 			image_id += 1
 
 	# generate image and save to designated outfile
-	pylab.imshow(montageMatrix, cmap=colormap)
-	pylab.axis('off')
-	pylab.savefig(outfile, figsize = (8,8), dpi=100)
+	pylab.imsave(fname=outfile, arr=montageMatrix, cmap=colormap, dpi=100, format="png")
 
 	return montageMatrix
 
