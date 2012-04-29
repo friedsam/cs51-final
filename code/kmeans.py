@@ -83,8 +83,7 @@ def makeClusters(data, number_of_clusters):
     ''' makeClusters respects the data invariant of the rest of the 
     of the project by transposing the incoming and outgoing data
     thus changing from column data points to row data, and back'''
-    print "Running kmeans. Sample data point to be clustered:\n"
-    print data[:,0]
+    print "Starting kmeans ..."
     print "\nCreating %d clusters..."  % number_of_clusters
     (clusters, centroids) = kalgorithm(data.T, number_of_clusters)
     tclust = [0] * number_of_clusters
@@ -105,10 +104,6 @@ def clusterpkl(input_filename, k_num, output_filename):
     pickle.dump( (clusters, centroids), f)
     f.close()
     print "Done!\n"
-
-def run( inputFilepath, outputFilepath, outputDirpath, kNum):
-    clusterpkl(inputFilepath, kNum, ouptuFilepath)
-    # TODO generate images in outputDirpath
 
 #function to load a cluster pkl (created above)
 def getclusterspkl(filename):

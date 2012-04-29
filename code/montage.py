@@ -98,9 +98,10 @@ def colorsMontage(data, outfile, colormap=pylab.cm.gnuplot2, normalize=mc.Normal
                 image_id += 1
 
 	# create image and save it to designated outfile
-       	pylab.imshow(montageMatrix, cmap=colormap, norm=normalize, interpolation='bicubic')
-       	pylab.axis('off')
-       	pylab.savefig(outfile)
+       	pylab.imsave(fname=outfile, arr=montageMatrix, cmap=colormap, vmin=0, vmax=255, dpi=100, format="png") # norm=normalize, interpolation=None, 
+    	
+	# imgshow not supported in GUI mode
+       	# pylab.imshow(montageMatrix, cmap=colormap, norm=normalize, interpolation='bicubic')
 
         return montageMatrix
 
