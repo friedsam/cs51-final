@@ -171,6 +171,22 @@ def makeTriple( training, test, k, D ):
 	#the function.. check this later.  
         return zip(trainMat.T, trueLablst, assignLablst )
 
+def confusion( triple, digit ):
+	'''Makes a confusion matrix for each digit, and 
+	creates an output for inputting into the montage
+	function.  '''
+	d = digit
+	dummylist = [] 
+	for vec,true,assigned in triple:
+		if d == true == assigned:
+			dummylist.append(vec,"TP") 
+		else if (d != true) & (d == assigned):
+			dummylist.append(vec,"FP")
+		else if (d == true ) & (d != assigned):
+			dummylist.append(vec,"FN")
+
+			
+			 
 
 #==================== RUN TIME BEHAVIOR =======================#
 
