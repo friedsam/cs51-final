@@ -24,7 +24,7 @@ def simplekfromscratch(filename, k):
     pkl = pickle.load(open(filename))
     leng = len(pkl)
     w = [0] * leng
-    for k in range(leng):
-        w[k] = array(pkl[k][0]).ravel()
+    for j in range(leng):
+        w[j] = array(pkl[j][0]).ravel()
     (clusters, centroids) = makeClusters(array( w).T, k)
     kmeansClustersJpgs(clusters, filename)
