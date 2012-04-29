@@ -184,7 +184,5 @@ if __name__ == "__main__":
 	#Save this 
 	pickle.dump(makeTriple( train, test, k, D ),\
 		open(c_triple, "w")) 
-	#And feed into montage later. 
-
-#I need to debug part by part. 
+	#And feed into montage later.  
 	
