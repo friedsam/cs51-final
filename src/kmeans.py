@@ -94,6 +94,10 @@ def clusterpkl(input_filename, k_num, output_filename):
     f.close()
     print "Done!\n"
 
+def run( inputFilepath, outputFilepath, outputDirpath, kNum):
+    clusterpkl(inputFilepath, kNum, ouptuFilepath)
+    # TODO generate images in outputDirpath
+
 #function to load a cluster pkl (created above)
 def getclusterspkl(filename):
     return pickle.load(open(filename, "r"))

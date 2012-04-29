@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
 import montage
 import pickle
 import string
@@ -29,3 +32,7 @@ def simplekfromscratch(filename, k):
         w[k] = array(pkl[k][0]).ravel()
     (clusters, centroids) = makeClusters(array( w), k)
     kmeansClustersJpgs(clusters, filename)
+
+def run( inputFilepath, outputFilepath, outputDirpath, kNum):
+    print "Run simplekmeans ..."
+    simplekmeans(inputFilepath, kNum)
