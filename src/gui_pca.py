@@ -1,5 +1,5 @@
 from numpy import *
-# import matrix
+import matrix
 import sys 
 import pickle
 
@@ -103,14 +103,13 @@ def decreasing(mat,comps):
 #	with open("pca_output.pkl","w") as outputf:
 #		pickle.dump(outT, outputf) 
 
-def run( inputFilepath, outputFilepath, outputDirpath, components ):
+def run( inputFilepath, outputFilepath, components ):
     pkl = pickle.load(open(inputFilepath))
     print "Generating pickle file(s)..."
     print "Reading from: %s" % inputFilepath
     print "Writing to: %s" % outputFilepath
     with open(outputFilepath, "w") as outputf:
         pickle.dump( PCA( pkl, components ), outputf )
-    # TODO create images and write to outputDirpath
     print("Done!")
 
 if __name__ == "__main__":
