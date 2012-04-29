@@ -66,6 +66,7 @@ def calcDist(point1,point2):
 # returns (a length num list of clusters where each cluster is a numpy array
 # of its data points) paired with ( a list of the centroids).
 def makeClusters(data, number_of_clusters):
+    data = data.T
     new_clusters = initializeClusters(data,number_of_clusters)
     #calculate initial centroids 
     new_centroids = getCentroids(new_clusters)
@@ -75,7 +76,10 @@ def makeClusters(data, number_of_clusters):
         old_centroids = new_centroids
         new_clusters = reassignClusters(new_centroids,data)
         new_centroids = getCentroids(new_clusters)
-    return (new_clusters, new_centroids)
+    tclust = [0] * number_of_clusters
+    for j in range(len(new_clusters)):
+        tclust[j] = new_clusters[j].T
+    return (tclust, new_centroids)
 
 ####   Some Pickle functions for kmeans  ####
 # takes a filename of a pickle of a numpy array of points
