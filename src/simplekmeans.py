@@ -22,16 +22,6 @@ def simplekmeans(filename, outputDirpath, k):
     (clusters, centroids) = makeClusters(parray, k)
     kmeansClustersJpgs(clusters, filename, outputDirpath)
 
-def simplekfromscratch(filename, k):
-# simplekmeans from test-1k.pkl format
-    pkl = pickle.load(open(filename))
-    leng = len(pkl)
-    w = [0] * leng
-    for j in range(leng):
-        w[j] = array(pkl[j][0]).ravel()
-    (clusters, centroids) = makeClusters(array( w).T, k)
-    kmeansClustersJpgs(clusters, filename)
-
 def run( inputFilepath, outputFilepath, outputDirpath, kNum):
     print "Run simplekmeans ..."
     simplekmeans(inputFilepath, outputDirpath, kNum)
