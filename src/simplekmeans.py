@@ -11,7 +11,7 @@ def kmeansClustersJpgs(clusters, filename):
     for j in range(len(clusters)):
         name = string.rstrip(filename,".pkl")
         name = name + "clust" + str(j) + "of" + str(len(clusters)-1) + ".jpg"
-        montage.montage(clusters[j].transpose(), open(name, "w"))
+        montage.montage(clusters[j], open(name, "w"))
 
 # filename should be a pickle in format of datapoints
 # i.e parray is 1000 x 196 array
