@@ -6,6 +6,7 @@ import sys
 import csv 
 import kmeans 
 import pca 
+import montage 
 
 #import parse_input
 #import parse_ouput 
@@ -90,10 +91,6 @@ def labelsort( inputpair ):
 
 #=================== FEATURE EXTRACTION ======================#
 
-#Currently k-means is not behaving so well with respect to 
-#column operations. Need to transpose input matrix, and 
-#tranpose it back to get the column representation.  
-
 def centroidPCA( inputpair, k ):
 	'''get the centroid list for later implementation in
 	conjunction with PCA. The input is the sorted list given 
@@ -101,13 +98,10 @@ def centroidPCA( inputpair, k ):
 	sortlist = labelsort( inputpair )
 	dummylist = []
 	for item in sortlist:
-		dataMat, digit = item 
-		#notice here the transpose!
-		#for the final version, need to fix.  
-		clusters, centroids = kmeans.makeClusters(dataMat.T, k)
+		dataMat, digit = item  
+		clusters, centroids = kmeans.makeClusters(dataMat, k)
 		for vec in centroids:
-			#initialize to numpy arrays.. 
-			#this should really be done at the k-means level.
+			#initialize list to numpy arrays 
 			vec = array(vec) 
 			dummylist.append((vec, digit))
 	return dummylist 
@@ -148,6 +142,8 @@ def assign(testMat, centroidLst):
         '''returns list of labels
         assigned to each column vector in 
         the test matrix'''
+	#remember I have to assign the labels of the 
+	#sorted label list. 
         dummy = []
         numRow, numCol = testMat.shape
         for i in range(0,numCol):
@@ -169,23 +165,31 @@ def makeTriple( training, test, k, D ):
 	#I don't think this zip functions works properly
 	#because I think I need to take the transpose of
 	#the function.. check this later.  
-        return zip(trainMat.T, trueLablst, assignLablst )
+        return zip(testMat.T, trueLablst, assignLablst )
 
 def confusion( triple, digit ):
 	'''Makes a confusion matrix for each digit, and 
 	creates an output for inputting into the montage
-	function.  '''
+	function. Note: confusion matrix is C_{i,j} such
+	that C_{1,1} = TP, C_{1,2} = FN, C_{2,1} = FP,
+	C_{2,2} = TN . '''
 	d = digit
+	length = len(triple)
 	dummylist = [] 
+	TP = FN = FP = TN = 0
 	for vec,true,assigned in triple:
 		if d == true == assigned:
-			dummylist.append(vec,"TP") 
-		else if (d != true) & (d == assigned):
-			dummylist.append(vec,"FP")
-		else if (d == true ) & (d != assigned):
-			dummylist.append(vec,"FN")
-
-			
+			dummylist.append((vec,"TP"))
+			TP += 1  
+		elif (d != true) & (d == assigned):
+			dummylist.append((vec,"FP"))
+			FP +=1
+		elif (d == true ) & (d != assigned):
+			dummylist.append((vec,"FN"))
+			FN +=1
+	TN = length - (TP+FN+FP)
+	confusionarray = array([[TP,FN],[FP,TN]]) 
+	return dummylist, confusionarray 			
 			 
 
 #==================== RUN TIME BEHAVIOR =======================#
@@ -200,5 +204,5 @@ if __name__ == "__main__":
 	#Save this 
 	pickle.dump(makeTriple( train, test, k, D ),\
 		open(c_triple, "w")) 
-	#And feed into montage later.  
+	
 	
