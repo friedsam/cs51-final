@@ -9,18 +9,18 @@ from kmeans import *
 
 # remember to transpose!
 
-def kmeansClustersJpgs(clusters, filename):
+def kmeansClustersJpgs(clusters, filename, outputDirpath):
 # takes a clusters object and a filename and makes .jpg's
     for j in range(len(clusters)):
-        name = string.rstrip(filename,".pkl")
-        name = name + "clust" + str(j) + "of" + str(len(clusters)-1) + ".jpg"
+        name = outputDirpath + "/" + str(j) + ".png"
+        print("Trying create image file at: %s" % name)
         montage.montage(clusters[j], open(name, "w"))
 
-def simplekmeans(filename, k):
+def simplekmeans(filename, outputDirpath, k):
 # filename should be a pickle in format of colmat
     parray = pickle.load(open(filename))
     (clusters, centroids) = makeClusters(parray, k)
-    kmeansClustersJpgs(clusters, filename)
+    kmeansClustersJpgs(clusters, filename, outputDirpath)
 
 def simplekfromscratch(filename, k):
 # simplekmeans from test-1k.pkl format
@@ -34,4 +34,4 @@ def simplekfromscratch(filename, k):
 
 def run( inputFilepath, outputFilepath, outputDirpath, kNum):
     print "Run simplekmeans ..."
-    simplekmeans(inputFilepath, kNum)
+    simplekmeans(inputFilepath, outputDirpath, kNum)
