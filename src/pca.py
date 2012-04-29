@@ -2,21 +2,6 @@ from numpy import *
 import sys 
 import pickle
 
-# very simple matrices for basic testing
-#A = array([[1.,2.,3.],[4.,5.,6.],[7.,8.,9.]])
-#B = array([[1.,6.,2.],[6.,3.,1.]]) 
-
-#I'm also going to use QR decomposition, if necessary. 
-#I don't think at this point, orthonormalization is necessary. 
-#Simply project onto eigenspace, and then find Euclidean distance 
-#between a projected data vector and the centroid of the subspace 
-#defined by the projection of the digits. Perhaps test it on 
-#a dumb 1 dimensional projection, and looking at how it does. 
-#K-means clustering comes in handy because more clusters probably leads to 
-#better centroid values for differing digits.  
-
-#This needs to get done! 
-
 #find covariance matrix
 def covariance(mat):
 	dim,numdata = mat.shape
@@ -43,13 +28,6 @@ def eigs( mat, comps ):
 	vecsort = vec.T[perm].T
 	return valsort[0:comps], vecsort[:,0:comps]
 
-#Next Steps: 
-# (1) I need to make sure that the eigenvalues correspond to real eigenvalues. Maybe this is not such a _huge_ problem. 
-# (2) Orthonormalize the eigenvectors by implementing the gram-schmidt procedure in linear algebra. 
-# I think I can orthonormalize the eigenbasis, and then choose the largest k of them, to ensure 
-# large enough variance. 
-# Orthonormalization is the last priority. 
-
 
 def PCA(inputpair, comps):
 	'''Takes matrix with the datapoint in 
@@ -62,11 +40,7 @@ def PCA(inputpair, comps):
 	dim,numdata = mat.shape
 	cov_mat = covariance(mat)
 	vals,vecs = eigs(cov_mat,comps)
-        #if len(vals) < comps:
-	#	raise Exception("Not enough real eigenvalues.")
-
 	projmat = dot(vecs.T,mat)
-	#return projmat[0:comps]
 	return (projmat,labels),vecs.T 
 
 def variance(mat,comps):
@@ -96,31 +70,12 @@ def decreasing(mat,comps):
 
 	return True
 
-#if __name__ == "__main__":
-#	#print( str(PCA(pickle.load(open(c_filePKL)), c_numcomps)) )
-#	pkl = pickle.load(open(c_filePKL))
-#	a = covariance( pkl )
-#	print "The covariance matrix is \n"
-#	print a
-#	print "\n"
-#	print "with dimensions \n"
-#	print a.shape 
-#	D,V = eigs( a, c_numcomps )
-#	print "the values are\n"
-#	print D 
-#	print D.shape
-#	print "the vectors are\n"
-#	print V
-#	print V.shape 
-#	outT = (a,D,V)
-#	with open("pca_output.pkl","w") as outputf:
-#		pickle.dump(outT, outputf) 
-
 if __name__ == "__main__":
 	c_fileInPKL, c_fileOutPKL       = sys.argv[1:3]
 	c_numcomps                      = int(sys.argv[3])
 	if len( sys.argv[1:] ) < 3:
-        	raise Exception("Usage: python pca.py <input.pkl> <output.pkl> <number_of_components>")
+        	raise Exception("Usage: python pca.py <input.pkl> \
+			 <output.pkl> <number_of_components>")
 	pkl = pickle.load(open(c_fileInPKL))
 	print "Generating pickle file(s) ..."
 	with open(c_fileOutPKL,"w") as outputf:
