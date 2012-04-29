@@ -61,8 +61,7 @@ def toColMat( filename ):
         outputarray = outputarray.T
         return (outputarray,dummylabel)
 
-
-#Run Time  
+#Execute 
 if __name__ == "__main__":
 	if len(sys.argv) < 1:
         	raise Exception("Usage: parse_input.py <input.txt>")

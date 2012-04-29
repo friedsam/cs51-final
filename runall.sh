@@ -9,6 +9,6 @@ echo "Running Handwriting Recognition Module ...\n"
 
 echo "Running pca ...\n" 
 
-python src/main.py /Users/ysupmoon/Documents/cs_51/final_project/cs51-final/data/handwriting/training-9k_colmat.pkl /Users/ysupmoon/Documents/cs_51/final_project/cs51-final/data/handwriting/test-1k_colmat.pkl /Users/ysupmoon/Documents/cs_51/final_project/cs51-final/output/triple_new.pkl 1 50
+python src/main.py /Users/ysupmoon/Documents/cs_51/final_project/cs51-final/data/handwriting/training-9k_colmat.pkl /Users/ysupmoon/Documents/cs_51/final_project/cs51-final/data/handwriting/test-1k_colmat.pkl /Users/ysupmoon/Documents/cs_51/final_project/cs51-final/output/triple_newer.pkl 3 10
 
 echo "Done. \n"
