@@ -42,15 +42,15 @@ if __name__ == "__main__":
 """
 
 # information for montage digit colors
-tp_color = 40.
-tp_range = 40.
-fn_color = 70.
-fn_range = 40.
-fp_color = 130.
-fp_range = 40.
+tp_color = 170.
+tp_range = 70.
+fn_color = 15.
+fn_range = 70.
+fp_color = 90.
+fp_range = 70.
 max_color = 255.
 
-def colorsMontage(data, outfile, colormap=pylab.cm.cubehelix, normalize=mc.Normalize(vmin=0,vmax=255)):
+def colorsMontage(data, outfile, colormap=pylab.cm.gnuplot2, normalize=mc.Normalize(vmin=0,vmax=255)):
         # gather information on data
 	numdata = len(data)
 	dim = len(data[0][0])
@@ -100,6 +100,8 @@ def colorsMontage(data, outfile, colormap=pylab.cm.cubehelix, normalize=mc.Norma
 	# create image and save it to designated outfile
        	pylab.imsave(fname=outfile, arr=montageMatrix, cmap=colormap, vmin=0, vmax=255, dpi=100, format="png") # norm=normalize, interpolation=None, 
     	
+	# imgshow not supported in GUI mode
+       	# pylab.imshow(montageMatrix, cmap=colormap, norm=normalize, interpolation='bicubic')
 
         return montageMatrix
 

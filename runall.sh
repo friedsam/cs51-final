@@ -12,8 +12,6 @@ echo "Running Handwriting Recognition Module ...\n"
 
 echo "Running pca ...\n" 
 
-#python src/main.py /Users/ysupmoon/Documents/cs_51/final_project/cs51-final/data/handwriting/training-9k_colmat.pkl /Users/ysupmoon/Documents/cs_51/final_project/cs51-final/data/handwriting/test-1k_colmat.pkl /Users/ysupmoon/Documents/cs_51/final_project/cs51-final/output/ 3 10
-
-python src/main.py /Users/ysupmoon/Documents/cs_51/final_project/cs51-final/data/handwriting/training-9k_colmat.pkl /Users/ysupmoon/Documents/cs_51/final_project/cs51-final/data/handwriting/validation-1k_colmat.pkl /Users/ysupmoon/Documents/cs_51/final_project/cs51-final/output/ 3 10
+python `pwd`/src/main.py `pwd`/data/handwriting/training-9k_colmat.pkl `pwd`/data/handwriting/test-1k_colmat.pkl `pwd`/output/ 3 10
 
 echo "Done. \n"
