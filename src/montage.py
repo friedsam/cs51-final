@@ -52,8 +52,63 @@ fp_color = 130.
 fp_range = 40.
 max_color = 255.
 
-def colorsMontage(data, outfile, digit, colormap=pylab.cm.cubehelix, normalize=mc.Normalize(vmin=0,vmax=255)):
-        # gather information on input data
+def colorsMontage(data, outfile, colormap=pylab.cm.cubehelix, normalize=mc.Normalize(vmin=0,vmax=255)):
+        # gather information on data
+	numdata = len(data)
+	dim = len(data[0][0])
+	size = sqrt(dim)
+	if size % 1 != 0:
+		raise Exception("Data not square")
+
+	# determine size of montageMatrix; initialize
+	rows = int(ceil(sqrt(numdata)))
+	cols = rows
+	montageMatrix = zeros((size * rows, size * cols))
+
+	# initialize variables
+	image_id = 0
+	new_color = 0
+	color_range = 0
+
+	for i in range(numdata):
+		if image_id >= numdata:
+			break
+		
+		# set data color according TP/FP/FN
+		if data[i][1] == "TP":
+			new_color = tp_color
+			color_range = tp_range
+		elif data[i][1] == "FP":
+			new_color = fp_color
+			color_range = fp_range
+		else:
+			new_color = fn_color
+			color_range = fn_range
+
+		# prepare section of matrix, grab data point
+		sliceRow, sliceCol = (image_id / rows) * size, (image_id % cols) * size
+		number = array(data[i][0])
+
+                # recolor the number based on true pos / false pos / false neg
+                for j in range(dim):
+                        if number[j] != 0:
+                                number[j] = ((number[j] / max_color) * color_range) + new_color
+
+                # add the number to the montage
+                montageMatrix[sliceRow:sliceRow + size, sliceCol:sliceCol + size] = number.reshape(size,size)
+
+                image_id += 1
+
+	# create image and save it to designated outfile
+       	pylab.imshow(montageMatrix, cmap=colormap, norm=normalize, interpolation=None)
+       	pylab.axis('off')
+       	pylab.savefig(outfile)
+
+        return montageMatrix
+
+
+
+	"""# gather information on input data
 	dim = len(data[0][0])
         numdata = len(data)
         size = sqrt(dim)
@@ -126,4 +181,4 @@ def colorsMontage(data, outfile, digit, colormap=pylab.cm.cubehelix, normalize=m
         pylab.axis('off')
         pylab.savefig(outfile)
 
-	return montageMatrix
+	return montageMatrix"""
