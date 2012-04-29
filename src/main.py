@@ -7,6 +7,7 @@ import csv
 import kmeans 
 import pca 
 import montage 
+import os 
 
 #import parse_input
 #import parse_ouput 
@@ -195,14 +196,27 @@ def confusion( triple, digit ):
 #==================== RUN TIME BEHAVIOR =======================#
 
 if __name__ == "__main__": 
-	c_trainf, c_testf, c_triple = sys.argv[1:4]
+	c_trainf, c_testf, c_dir = sys.argv[1:4]
 	k = int(sys.argv[4])
 	D = int(sys.argv[5]) 
+	c_basename = os.path.basename(c_testf).split(".")[0]
+	c_triple = c_basename + "_triple.pkl"
+	c_confusion = c_basename + "_confusion.pkl" 
 	train 	= pickle.load(open(c_trainf)) 
 	test 	= pickle.load(open(c_testf))   
 	
-	#Save this 
-	pickle.dump(makeTriple( train, test, k, D ),\
-		open(c_triple, "w")) 
-	
-	
+	#Save this
+	print "making triple ... \n" 
+	triple = makeTriple(train,test,k,D)
+	print "dumping pickle ... \n"
+	pickle.dump(triple,open(c_triple, "w")) 
+	for i in range(0,10):
+		confPair = confusion(triple,i)
+		print "dumping confusion", str(i)
+		pickle.dump( confPair, open( c_dir + c_basename + \
+			 "_confusion" + str(i) + ".pkl","w" ) )
+		montagelist, confusionarray = confPair
+		print "\n Making montage", str(i)
+		montage.colorsMontage( montagelist, c_dir + c_basename +\
+			"_montage" + str(i) + ".jpg")	
+				
