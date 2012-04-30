@@ -8,6 +8,8 @@ Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 """
 
 import sys
+import string
+from numpy import *
 import os
 import parse_input as ToPickle
 import gui_main as ToColmat
@@ -27,7 +29,7 @@ class StartQT4(QtGui.QMainWindow):
         self.ui.imageView.setHorizontalScrollBarPolicy( QtCore.Qt.ScrollBarAlwaysOff )
         self.ui.imageView.setVerticalScrollBarPolicy( QtCore.Qt.ScrollBarAlwaysOff )
 
-        QtCore.QObject.connect(self.ui.processDataButton, QtCore.SIGNAL("clicked()"), self.processData)
+        #QtCore.QObject.connect(self.ui.processDataButton, QtCore.SIGNAL("clicked()"), self.processData)
         QtCore.QObject.connect(self.ui.pcaOnlyCheckbox, QtCore.SIGNAL("clicked()"), self.setPcaOnly)
         QtCore.QObject.connect(self.ui.kmeansOnlyCheckbox, QtCore.SIGNAL("clicked()"), self.setKmeansOnly)
         QtCore.QObject.connect(self.ui.runButton, QtCore.SIGNAL("clicked()"), self.runData)
@@ -152,18 +154,19 @@ class StartQT4(QtGui.QMainWindow):
     
     def updateConfusion(self):
         filepath = self.digitsPath + "/conf_" + self.ui.digit.currentText().replace(".png", ".pkl")
-        confusionData = pickle.load(open(filepath))
-
-        cell1 = QtGui.QTableWidgetItem(str(1) + "%")
-        cell1.setBackground(QtGui.QBrush(QtGui.QColor( 255, 0, 0, 100 )))
+        print("filepath %s" % filepath)
+        confusionData = pickle.load(open(filepath))[1]
+      
+        cell1 = QtGui.QTableWidgetItem(str(confusionData[0][0]))
+        cell1.setBackground(QtGui.QBrush(QtGui.QColor( 0, 255, 0, 100 )))
         cell1.setTextAlignment(QtCore.Qt.AlignCenter)
-        cell2 = QtGui.QTableWidgetItem("2")
-        cell2.setBackground(QtGui.QBrush(QtGui.QColor( 0, 255, 0, 100 )))
+        cell2 = QtGui.QTableWidgetItem(str(confusionData[0][1]))
+        cell2.setBackground(QtGui.QBrush(QtGui.QColor( 255, 0, 0, 100 )))
         cell2.setTextAlignment(QtCore.Qt.AlignCenter)
-        cell3 = QtGui.QTableWidgetItem("3")
+        cell3 = QtGui.QTableWidgetItem(str(confusionData[1][0]))
         cell3.setBackground(QtGui.QBrush(QtGui.QColor( 255, 0, 0, 100 )))
         cell3.setTextAlignment(QtCore.Qt.AlignCenter)
-        cell4 = QtGui.QTableWidgetItem("4")
+        cell4 = QtGui.QTableWidgetItem(str(confusionData[1][1]))
         cell4.setBackground(QtGui.QBrush(QtGui.QColor( 0, 255, 0, 100 )))
         cell4.setTextAlignment(QtCore.Qt.AlignCenter)
         

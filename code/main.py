@@ -163,6 +163,9 @@ def run( inputDataFilepath, inputTrainingFilepath, outputFilepath, outputDirpath
         confPair = confusion(triple,i)
         print "dumping confusion", str(i)
         pickle.dump( confPair, open( c_dest_dir + "conf_" + str(i) + ".pkl","w" ) )
+        #print "writing confusion matrix in text file", str(i)
+        #writeConfusion( confPair[1], c_dest_dir + 
+        #    "conf_" + str(i) + ".txt" )
         montagelist, confusionarray = confPair
         print "\n Making montage", str(i)
         montage.colorsMontage( montagelist, c_dest_dir + str(i) + ".png")	
