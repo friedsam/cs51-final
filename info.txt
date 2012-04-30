@@ -1,0 +1,3 @@
+title: Feature Extraction and Inference for Handwriting Recognition 
+ 
+seas-usernames: ymoon, danamod, wchamber, friedsam 
